@@ -1,13 +1,25 @@
 import React, {Component} from 'react'
 import {View, FlatList, Text, StatusBar} from 'react-native'
 import currencies from '../data/currencies';
+import {connect} from 'react-redux'
 
 import { ListItem, Seperator } from '../components/List'
+import { changeBaseCurrency, changeQuoteCurrency } from '../actions/currencies';
 
 const TEMP_CURRENT_CURRENCY = 'CAD'
 class CurrencyList extends Component {
 	
-	handlePress =() => {
+	handlePress =(currency) => {
+		const {type} = this.props.navigation.state.params
+		console.log(type)
+		if(type  === 'Base') {
+			this.props.dispatch(changeBaseCurrency(currency))
+		}
+		else if(type === 'Quote') {
+			this.props.dispatch(changeQuoteCurrency(currency))
+		}
+
+
 		this.props.navigation.goBack(null)
 	}
 	render() {
@@ -20,7 +32,7 @@ class CurrencyList extends Component {
 							<ListItem 
 							text= {item}
 							selected={item === TEMP_CURRENT_CURRENCY}
-							onPress={this.handlePress}
+							onPress={() => this.handlePress(item)}
 						/>
 						)
 			
@@ -33,5 +45,8 @@ class CurrencyList extends Component {
 	}
 }
 
+const mapStateToProps = () => ({
 
-export default CurrencyList
+})
+
+export default connect(mapStateToProps, null)(CurrencyList)
