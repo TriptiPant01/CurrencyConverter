@@ -23,6 +23,10 @@ class Logo extends Component {
 		console.log('hide')
 	}
 	render () {
+		const imageStyle = [
+			Style.logo,
+			this.props.tintColor ? {tintColor: this.props.tintColor} : null
+		]
 		return (
 				<View style={Style.container}>
 					<ImageBackground
@@ -34,7 +38,7 @@ class Logo extends Component {
 				<Image 
 				resizeMode='contain'
 					source={require('./images/logo.png')}
-					style={Style.logo}
+					style={imageStyle}
 				/>
 					</ImageBackground>
 							<Text style={Style.text}>Currency Converter</Text>

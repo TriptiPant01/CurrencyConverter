@@ -9,17 +9,16 @@ import { ClearButton } from '../components/Button'
 
 import { LastConverted } from '../components/Text'
 import { Header } from '../components/Header'
-import { swapCurrency, changeCurrencyAmount } from '../actions/currencies';
+import { swapCurrency, changeCurrencyAmount, getInitialConversion } from '../actions/currencies';
 
-
-
-const TEMP_LAST_CONVERTED = new Date();
-const TEMP_CONVERSION_RATE = 0.79739;
 
 class Home extends Component {
 	// static propTypes ={
 
 	// }
+	componentWillMount () {
+		this.props.dispatch(getInitialConversion())
+	}
 	handleChangeText = (text) => {
 		this.props.dispatch(changeCurrencyAmount(text))
     console.log('change text');
@@ -46,25 +45,28 @@ class Home extends Component {
 		}
 		console.log(this.props.quoteCurrency, 'quote')
 		return (
-			<Container>
+			<Container backgroundColor= {this.props.primaryColor}>
 			<StatusBar translucent={false} barStyle="light-content" />
 			<Header
 			onPress={this.handleOnpressHeaderIcon}
 			/>
 			<KeyboardAvoidingView behavior='padding'>
-			<Logo />
+			<Logo tintColor={this.props.primaryColor} />
 			<InputWithButton
 			buttonText ={this.props.baseCurrency}
 			onPress={this.handlePressBaseCurrency}
 			defaultValue={this.props.amount.toString()}
 			keyboardType="numeric"
 			onChangeText={this.handleChangeText}
+			textColor={this.props.primaryColor}
 			/>
 			<InputWithButton
 			editable={false}
 			buttonText={this.props.quoteCurrency}
 			onPress={this.handlePressQuoteCurrency}
 			value={quotePrice}
+			textColor={this.props.primaryColor}
+
 			/>
 			  <LastConverted
           date={this.props.lastConversionDate}
@@ -95,6 +97,7 @@ const mapStateToProps = (state) => {
 		amount,
 		conversionRate: rates[quoteCurrency] || 0,
 		fetching,
+		primaryColor: state.theme.primaryColor,
 		lastConversionDate: conversionSelector.date ? new Date(conversionSelector.date) : new Date()
 	}
 }
